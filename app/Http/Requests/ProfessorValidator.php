@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProfessorValidator extends FormRequest
@@ -24,5 +26,27 @@ class ProfessorValidator extends FormRequest
         return [
             //
         ];
+    }
+
+    public function store(Request $request, string $action = 'store'){
+        $params = [
+            'name'          => 'required|string',
+            'surnames'      => 'required|string',
+            'number'        => 'required|string',
+            'class_hours'   => 'required|integer|between:0,8'
+        ];
+
+        if($action == 'update'){
+            $params = array_merge($params, [
+                'id'        => 'required|integer'
+            ]);
+        }
+        $validator = Validator::make($request->all(), $params);
+        
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        return true;
     }
 }
