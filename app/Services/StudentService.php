@@ -10,6 +10,11 @@ class StudentService {
         
     }
 
+    /**
+     * Creación de alumno
+     * @param object $data
+     * @return array $array
+     */
     public function store(object $data){
         $file_content = file_get_contents($this->file_path);
         $json_content = json_decode($file_content);
@@ -38,6 +43,11 @@ class StudentService {
         return $student_array;
     }
 
+    /**
+     * Actualizar alumno
+     * @param object $data
+     * @return array $response
+     */
     public function update(object $data){
         $file_content = file_get_contents($this->file_path);
         $json_content = json_decode($file_content);
