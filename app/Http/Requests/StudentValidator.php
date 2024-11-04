@@ -28,14 +28,22 @@ class StudentValidator extends FormRequest
         ];
     }
 
-    public function store(Request $request){
-        $validator = Validator::make($request->all(), [
+    public function store(Request $request, string $action = 'store'){
+        $params = [
             'name'          => 'required|string',
             'surnames'      => 'required|string',
             'enrollment'    => 'required|string',
             'average'       => 'required|numeric|between:0,10'
-        ]);
-       
+        ];
+
+        if($action == 'update'){
+            $params = array_merge($params, [
+                'id'        => 'required|integer'
+            ]);
+        }
+        $validator = Validator::make($request->all(), $params);
+        
+        
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
