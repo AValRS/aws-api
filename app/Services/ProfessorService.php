@@ -19,18 +19,9 @@ class ProfessorService {
         $file_content = file_get_contents($this->file_path);
         $json_content = json_decode($file_content);
         $professors   = collect($json_content);
-
-        if($professors->count() == 0){
-            $id = 0;
-        } else {
-            $professors_desc = $professors->sortByDesc('id');
-            $professors_desc = $professors_desc->values();
-            $last_professor  = $professors_desc->first();
-            $id              = $last_professor->id + 1;
-        }
         
         $professor_array = [
-            'id'                => $id,
+            'id'                => $data->id,
             'nombres'           => $data->nombres,
             'apellidos'         => $data->apellidos,
             'numeroEmpleado'    => $data->numeroEmpleado,
