@@ -31,10 +31,10 @@ class StudentService {
         
         $student_array = [
             'id'            => $id,
-            'name'          => $data->name,
-            'surnames'      => $data->surnames,
-            'enrollment'    => $data->enrollment,
-            'average'       => $data->average,
+            'nombres'       => $data->nombres,
+            'apellidos'     => $data->apellidos,
+            'matricula'     => $data->matricula,
+            'promedio'      => $data->promedio,
         ];
         $students->push($student_array);
 
@@ -62,10 +62,10 @@ class StudentService {
             return $response;
         }
 
-        $element->name       = $data->name;
-        $element->surnames   = $data->surnames;
-        $element->enrollment = $data->enrollment;
-        $element->average    = $data->average;
+        $element->nombres     = $data->nombres;
+        $element->apellidos   = $data->apellidos;
+        $element->matricula   = $data->matricula;
+        $element->promedio    = $data->promedio;
         file_put_contents($this->file_path, $students->toJson());
 
         $response['message'] = ['message' =>'Operación exitosa'];

@@ -30,11 +30,11 @@ class ProfessorService {
         }
         
         $professor_array = [
-            'id'            => $id,
-            'name'          => $data->name,
-            'surnames'      => $data->surnames,
-            'number'        => $data->number,
-            'class_hours'   => $data->class_hours,
+            'id'                => $id,
+            'nombres'           => $data->nombres,
+            'apellidos'         => $data->apellidos,
+            'numeroEmpleado'    => $data->numeroEmpleado,
+            'horasClase'        => $data->horasClase,
         ];
         $professors->push($professor_array);
 
@@ -62,10 +62,10 @@ class ProfessorService {
             return $response;
         }
 
-        $element->name          = $data->name;
-        $element->surnames      = $data->surnames;
-        $element->number        = $data->number;
-        $element->class_hours   = $data->class_hours;
+        $element->nombres           = $data->nombres;
+        $element->apellidos         = $data->apellidos;
+        $element->numeroEmpleado    = $data->numeroEmpleado;
+        $element->horasClase        = $data->horasClase;
         file_put_contents($this->file_path, $professors->toJson());
 
         $response['message'] = ['message' =>'Operación exitosa'];

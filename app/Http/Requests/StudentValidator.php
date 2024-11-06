@@ -30,10 +30,10 @@ class StudentValidator extends FormRequest
 
     public function store(Request $request, string $action = 'store'){
         $params = [
-            'name'          => 'required|string',
-            'surnames'      => 'required|string',
-            'enrollment'    => 'required|string',
-            'average'       => 'required|numeric|between:0,10'
+            'nombres'   => 'required|string',
+            'apellidos' => 'required|string',
+            'matricula' => 'required|string',
+            'promedio'  => 'required|numeric|between:0,10'
         ];
 
         if($action == 'update'){
