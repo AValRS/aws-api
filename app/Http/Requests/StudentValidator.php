@@ -36,11 +36,11 @@ class StudentValidator extends FormRequest
             'promedio'  => 'required|numeric|between:0,10'
         ];
 
-        if($action == 'update'){
-            $params = array_merge($params, [
-                'id'        => 'required|integer'
-            ]);
-        }
+        // if($action == 'update'){
+        //     $params = array_merge($params, [
+        //         'id'        => 'required|integer'
+        //     ]);
+        // }
         $validator = Validator::make($request->all(), $params);
         
         
