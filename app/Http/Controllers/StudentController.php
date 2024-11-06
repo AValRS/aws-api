@@ -42,13 +42,14 @@ class StudentController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request){
+    public function update(Request $request, int $id){
         try {
             $validation =  $this->validator->store($request);
             if($validation !== true)
                 return response()->json(['error'=> $validation->original], 400);
 
-            $response = $this->student_service->update((object) $request->all());
+            $data = array_merge($request->all(), ['id' => $id]);
+            $response = $this->student_service->update((object) $data);
             
             return response()->json($response['message'], $response['code']);
         } catch (Exception $ex) {

@@ -19,18 +19,9 @@ class StudentService {
         $file_content = file_get_contents($this->file_path);
         $json_content = json_decode($file_content);
         $students = collect($json_content);
-
-        if($students->count() == 0){
-            $id = 0;
-        } else {
-            $students_desc = $students->sortByDesc('id');
-            $students_desc = $students_desc->values();
-            $last_student  = $students_desc->first();
-            $id            = $last_student->id + 1;
-        }
-        
+    
         $student_array = [
-            'id'            => $id,
+            'id'            => $data->id,
             'nombres'       => $data->nombres,
             'apellidos'     => $data->apellidos,
             'matricula'     => $data->matricula,

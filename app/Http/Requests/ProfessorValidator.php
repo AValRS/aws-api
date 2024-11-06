@@ -30,17 +30,18 @@ class ProfessorValidator extends FormRequest
 
     public function store(Request $request, string $action = 'store'){
         $params = [
+            'id'                => 'integer|required',
             'nombres'           => 'required|string',
             'apellidos'         => 'required|string',
-            'numeroEmpleado'    => 'required|string',
-            'horasClase'        => 'required|integer|between:0,8'
+            'numeroEmpleado'    => 'required|integer',
+            'horasClase'        => 'required|integer'
         ];
 
-        if($action == 'update'){
-            $params = array_merge($params, [
-                'id'        => 'required|integer'
-            ]);
-        }
+        // if($action == 'update'){
+        //     $params = array_merge($params, [
+        //         'id'        => 'required|integer'
+        //     ]);
+        // }
         $validator = Validator::make($request->all(), $params);
         
         
