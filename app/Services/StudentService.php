@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Models\Student;
+
 class StudentService {
 
-    private $file_path;
-    public function __construct() {
-        $this->file_path = storage_path('app/students.json');
-        
+    public function __construct() {   
+
     }
 
     /**
@@ -16,22 +16,16 @@ class StudentService {
      * @return array $array
      */
     public function store(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content);
-    
-        $student_array = [
-            'id'            => $data->id,
-            'nombres'       => $data->nombres,
-            'apellidos'     => $data->apellidos,
-            'matricula'     => $data->matricula,
-            'promedio'      => $data->promedio,
-        ];
-        $students->push($student_array);
+        $student = new Student();
 
-        file_put_contents($this->file_path, $students->toJson());
+        $student->nombres     = $data->nombres;
+        $student->apellidos   = $data->apellidos;
+        $student->matricula   = $data->matricula;
+        $student->promedio    = $data->promedio;
+        $student->password    = isset($data->password) ? bcrypt($data->password) : bcrypt(123456);
+        $student->save();
 
-        return $student_array;
+        return $student;
     }
 
     /**
@@ -40,12 +34,9 @@ class StudentService {
      * @return array $response
      */
     public function update(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $students->where('id', $data->id)->first();
+        $element = Student::find($data->id);
 
         if(is_null($element)){
             $response['message'] = ['message' =>'No se encontró el elemento solicitado'];
@@ -57,7 +48,10 @@ class StudentService {
         $element->apellidos   = $data->apellidos;
         $element->matricula   = $data->matricula;
         $element->promedio    = $data->promedio;
-        file_put_contents($this->file_path, $students->toJson());
+        if(isset($data->password))
+            $element->password    =  bcrypt($data->password);
+        
+        $element->save();
 
         $response['message'] = ['message' =>'Operación exitosa'];
         $response['code']    = 200;
@@ -71,12 +65,9 @@ class StudentService {
      * @return mixed $element
      */
     public function get(int $id){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $students->where('id', $id)->first();
+        $element = Student::find($id);
 
         if(is_null($element)){
             $response['message'] = 'No se encontró el elemento solicitado';
@@ -97,24 +88,18 @@ class StudentService {
      * @return array $response
      */
     public function delete(int $id){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $students->where('id', $id)->first();
+        $element = Student::find($id);
         
         if(is_null($element)){
             $response['message'] = ['message' =>'No se encontró el elemento solicitado'];
             $response['code']    = 404;
             return $response;
         }
-        $students = $students->reject(function ($item) use ($element){
-            return $item->id == $element->id;
-        })->values();
 
-
-        file_put_contents($this->file_path, $students->toJson());
+        $element->delete();
+        
         $response['message'] = ['message' =>'Operación exitosa'];
         $response['code']    = 200;
         return $response;
@@ -126,9 +111,7 @@ class StudentService {
      * @return array $students
      */
     public function find(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content)->toArray();
+        $students = Student::all();
         
         return $students;
     }

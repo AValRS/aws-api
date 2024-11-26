@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Models\Professor;
+
 class ProfessorService {
 
-    private $file_path;
     public function __construct() {
-        $this->file_path = storage_path('app/professors.json');
-        
     }
 
     /**
@@ -16,22 +15,15 @@ class ProfessorService {
      * @return array $array
      */
     public function store(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $professors   = collect($json_content);
-        
-        $professor_array = [
-            'id'                => $data->id,
-            'nombres'           => $data->nombres,
-            'apellidos'         => $data->apellidos,
-            'numeroEmpleado'    => $data->numeroEmpleado,
-            'horasClase'        => $data->horasClase,
-        ];
-        $professors->push($professor_array);
+        $professor = new Professor();
 
-        file_put_contents($this->file_path, $professors->toJson());
+        $professor->nombres           = $data->nombres;
+        $professor->apellidos         = $data->apellidos;
+        $professor->numeroEmpleado    = $data->numeroEmpleado;
+        $professor->horasClase        = $data->horasClase;
+        $professor->save();
 
-        return $professor_array;
+        return $professor;
     }
 
     /**
@@ -40,12 +32,9 @@ class ProfessorService {
      * @return array $response
      */
     public function update(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $professors = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $professors->where('id', $data->id)->first();
+        $element = Professor::find($data->id);
 
         if(is_null($element)){
             $response['message'] = ['message' =>'No se encontró el elemento solicitado'];
@@ -57,7 +46,7 @@ class ProfessorService {
         $element->apellidos         = $data->apellidos;
         $element->numeroEmpleado    = $data->numeroEmpleado;
         $element->horasClase        = $data->horasClase;
-        file_put_contents($this->file_path, $professors->toJson());
+        $element->save();
 
         $response['message'] = ['message' =>'Operación exitosa'];
         $response['code']    = 200;
@@ -71,12 +60,9 @@ class ProfessorService {
      * @return mixed $element
      */
     public function get(int $id){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $students = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $students->where('id', $id)->first();
+        $element = Professor::find($id);
 
         if(is_null($element)){
             $response['message'] = 'No se encontró el elemento solicitado';
@@ -88,6 +74,7 @@ class ProfessorService {
         $response['message']    = 'Operación exitosa';
         $response['item']       = $element;
         $response['code']       = 200;
+
         return $response;
     }
     
@@ -97,24 +84,18 @@ class ProfessorService {
      * @return array $response
      */
     public function delete(int $id){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $professors = collect($json_content);
         $response = ['message' => ''];
 
-        $element = $professors->where('id', $id)->first();
+        $element = Professor::find($id);
         
         if(is_null($element)){
             $response['message'] = ['message' =>'No se encontró el elemento solicitado'];
             $response['code']    = 404;
             return $response;
         }
-        $professors = $professors->reject(function ($item) use ($element){
-            return $item->id == $element->id;
-        })->values();
 
-
-        file_put_contents($this->file_path, $professors->toJson());
+        $element->delete();
+        
         $response['message'] = ['message' =>'Operación exitosa'];
         $response['code']    = 200;
         return $response;
@@ -126,9 +107,7 @@ class ProfessorService {
      * @return array $professors
      */
     public function find(object $data){
-        $file_content = file_get_contents($this->file_path);
-        $json_content = json_decode($file_content);
-        $professors = collect($json_content)->toArray();
+        $professors = Professor::all();
         
         return $professors;
     }
