@@ -30,7 +30,6 @@ class ProfessorValidator extends FormRequest
 
     public function store(Request $request, string $action = 'store'){
         $params = [
-            'id'                => 'integer|required',
             'nombres'           => 'required|string',
             'apellidos'         => 'required|string',
             'numeroEmpleado'    => 'required|integer',

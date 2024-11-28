@@ -30,10 +30,11 @@ class StudentValidator extends FormRequest
 
     public function store(Request $request, string $action = 'store'){
         $params = [
-            'nombres'   => 'required|string',
-            'apellidos' => 'required|string',
-            'matricula' => 'required|string',
-            'promedio'  => 'required|numeric|between:0,10'
+            'nombres'       => 'required|string',
+            'apellidos'     => 'required|string',
+            'matricula'     => 'required|string',
+            'promedio'      => 'required|numeric|between:0,10',
+            'fotoPerfilUrl' => 'nullable|string',
         ];
 
         // if($action == 'update'){
@@ -43,6 +44,32 @@ class StudentValidator extends FormRequest
         // }
         $validator = Validator::make($request->all(), $params);
         
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        return true;
+    }
+
+    public function picture(Request $request){
+        $params = [
+            'foto' => 'required|mimes:jpg,jpeg,png',
+        ];
+
+        $validator = Validator::make($request->all(), $params);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        return true;
+    }
+
+    public function login(Request $request){
+        $params = [
+            'password' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $params);
         
         if ($validator->fails()) {
             return response()->json($validator->errors());

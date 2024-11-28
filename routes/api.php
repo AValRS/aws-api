@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('api')->group(function () {
     Route::group(['prefix' => 'alumnos'], function () {
         Route::post('/', [StudentController::class, 'store']);
+        Route::post('/{id}/fotoPerfil', [StudentController::class, 'picture']);
+        Route::post('/{id}/email', [StudentController::class, 'sendEmails']);
+        Route::post('/{id}/session/login', [StudentController::class, 'login']);
+        Route::post('/{id}/session/verify', [StudentController::class, 'verify']);
+        Route::post('/{id}/session/logout', [StudentController::class, 'logout']);
         Route::put('/{id}', [StudentController::class, 'update']);
         Route::delete('/{id}', [StudentController::class, 'delete']);
         Route::get('/', [StudentController::class, 'find']);
