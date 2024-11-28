@@ -53,7 +53,7 @@ class StudentValidator extends FormRequest
 
     public function picture(Request $request){
         $params = [
-            'fotoPerfil' => 'required|mimes:jpg,jpeg,png',
+            'foto' => 'required|mimes:jpg,jpeg,png',
         ];
 
         $validator = Validator::make($request->all(), $params);
