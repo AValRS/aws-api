@@ -50,4 +50,30 @@ class StudentValidator extends FormRequest
         }
         return true;
     }
+
+    public function picture(Request $request){
+        $params = [
+            'fotoPerfil' => 'required|mimes:jpg,jpeg,png',
+        ];
+
+        $validator = Validator::make($request->all(), $params);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        return true;
+    }
+
+    public function login(Request $request){
+        $params = [
+            'password' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $params);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        return true;
+    }
 }
