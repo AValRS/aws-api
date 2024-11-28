@@ -142,10 +142,10 @@ class StudentService {
         }
 
         $date = Carbon::now()->format('YdmHi');
-        $new_name_file = str_replace(' ', '', $element->matricula) . '_' . $date . '_' . uniqid() . '.' .$data->fotoPerfil->getClientOriginalExtension();
+        $new_name_file = str_replace(' ', '', $element->matricula) . '_' . $date . '_' . uniqid() . '.' .$data->foto->getClientOriginalExtension();
         $new_path_file = 'public/' . $new_name_file;
         
-        $result = Storage::disk('s3')->putFileAs('public', $data->fotoPerfil, $new_name_file);
+        $result = Storage::disk('s3')->putFileAs('public', $data->foto, $new_name_file);
 
         if($result != false){
             $url = Storage::url($new_path_file);
@@ -176,7 +176,7 @@ class StudentService {
         if(is_null($element)){
             $response = [
                 'message' => 'No se encontró al alumno solicitado',
-                'code'    => 400,
+                'code'    => 404,
             ];
             return $response;
         }
@@ -229,14 +229,14 @@ class StudentService {
                     $item[$key] = reset($value);
                 }
                 $response['message'] = 'El alumno cuenta con sesión activa';
-                $response['code']    = 201;
+                $response['code']    = 200;
                 $response['item']    = $item;
             } else {
                 $result = $this->dynamo_service->putItem($data);
                 if($result['aws_response']['@metadata']['statusCode'] == '200'){
                     $response = [
                         'message' => 'Registro creado correctamente',
-                        'code'    => 201,
+                        'code'    => 200,
                         'item'    => $result['item'],
                     ];
                 }
@@ -244,7 +244,7 @@ class StudentService {
         } else {
             $response = [
                 'message' => 'Las credenciales proporcionadas no son válidas',
-                'code'    => 403,
+                'code'    => 400,
                 'item'    => null,
             ]; 
         }

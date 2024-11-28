@@ -32,7 +32,7 @@ class StudentController extends Controller
 
             $item = $this->student_service->store((object) $request->all());
             
-            return response()->json(['message' => 'Operación exitosa', 'item' => $item], 201);
+            return response()->json($item, 201);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 403);
         }
@@ -118,7 +118,7 @@ class StudentController extends Controller
             $data = array_merge(['id' => $id], $request->all());
             $response = $this->student_service->picture((object) $data);
 
-            return response()->json(['message' => $response['message'], 'url' => $response['url']], $response['code']);
+            return response()->json(['message' => $response['message'], 'fotoPerfilUrl' => $response['url']], $response['code']);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 403);
         }
@@ -154,7 +154,7 @@ class StudentController extends Controller
             $data = array_merge(['alumno_id' => $id], $request->all());
             $response = $this->student_service->login((object) $data);
 
-            return response()->json(['message' => $response['message'], 'item' => $response['item']], $response['code']);
+            return response()->json($response['item'], $response['code']);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 403);
         }

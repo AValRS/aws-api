@@ -31,7 +31,7 @@ class ProfessorController extends Controller
 
             $item = $this->professor_service->store((object) $request->all());
             
-            return response()->json(['message' => 'Operación exitosa', 'item' => $item], 201);
+            return response()->json($item, 201);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 403);
         }
